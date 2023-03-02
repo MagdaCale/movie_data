@@ -1,25 +1,66 @@
-import logo from './logo.svg';
 import './App.css';
+import MovieArray from './components/MovieArray'
+import DataComponent from './components/DataComponent'
+import SortedMoviesButton from './components/SortedMoviesButton'
+import { useState } from 'react'
 
-function App() {
+
+const App = () => {
+  const [movies, setMovies] = useState(MovieArray)
+  const [isReverseSort, setIsReverseSort] = useState(false)
+
+    const sortTitle = () => {
+      const newSortedMovies = [...movies]
+      newSortedMovies.sort((a, b) => {
+      if (a.title < b.title) {
+          return -1
+      } else if (a.title > b.title) {
+          return 1
+      } else {
+          return 0
+      }
+    })
+    setMovies(newSortedMovies)
+    setIsReverseSort(false)
+  }
+
+  const sortTitleReserve = () => {
+    const newSortedMovies = [...movies]
+    newSortedMovies.sort((a, b) => {
+      if (a.title > b.title) {
+          return -1
+      } else if (a.title < b.title) {
+          return 1
+      } else {
+          return 0
+      }
+    })
+    setMovies(newSortedMovies)
+    setIsReverseSort(true)
+  }
+
+
   return (
+    <>
+
+    <SortedMoviesButton sortTitle={sortTitle} sortTitleReserve={sortTitleReserve}/>
+
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+        {movies.map((elt, i) => // elt ist eine Variable, (in diesem Beispiel) um jedes Element im Array movies darzustellen, während es durch die map-Methode iteriert wird.
+          <DataComponent 
+            key={i}
+            title={elt.title}
+            year={elt.year}
+            director={elt.director}
+            duration={elt.duration}
+            genre={elt.genre}
+            rate={elt.rate}
+          />
+          // Wir verwenden dann die Eigenschaften jedes Elements (z. B. title, year, director, etc.), um die entsprechenden Daten an die Data-Komponente weiterzugeben, die dann gerendert wird.
+        )}
+      </div>
+    </>
+  )
 }
 
 export default App;
